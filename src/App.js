@@ -1,20 +1,17 @@
-// src/App.js
-
 import React, { useState } from "react";
 import axios from "axios";
 import UploadDocument from "./UploadDocument";
 import QuestionInput from "./QuestionInput";
+import "./App.css";
 
 function App() {
-  const [documentContent, setDocumentContent] = useState("");
   const [answer, setAnswer] = useState("");
 
-  // Function to handle the response after asking the question
   const handleAskQuestion = async (question) => {
     try {
-      const response = await axios.post("http://localhost:3000/ask", {
+      const response = await axios.post("http://localhost:3001/ask", {
         question,
-        documentContent,
+        documentContent: localStorage.getItem("documentContent"), // Store documentContent in localStorage
       });
       setAnswer(response.data.answer);
     } catch (error) {
@@ -22,19 +19,23 @@ function App() {
       setAnswer("Error processing your request.");
     }
   };
+  
 
   return (
-    <div className="App">
-      <h1>AI-Powered Document Q&A</h1>
-
-      {/* Document Upload Section */}
-      <UploadDocument setDocumentContent={setDocumentContent} />
-
-      {/* Question Input Section */}
-      <QuestionInput handleAskQuestion={handleAskQuestion} />
-
-      {/* Display Answer */}
-      {answer && <p>Answer: {answer}</p>}
+    <div className="app-container">
+      <header>
+        <h1>AI-Powered Document Q&A</h1>
+      </header>
+      <main>
+        <UploadDocument />
+        <QuestionInput handleAskQuestion={handleAskQuestion} />
+        {answer && (
+          <div className="answer-container">
+            <h3>Answer:</h3>
+            <p>{answer}</p>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

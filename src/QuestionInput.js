@@ -1,6 +1,5 @@
-// src/QuestionInput.js
-
 import React, { useState } from "react";
+import "./QuestionInput.css";
 
 const QuestionInput = ({ handleAskQuestion }) => {
   const [question, setQuestion] = useState("");
@@ -11,21 +10,24 @@ const QuestionInput = ({ handleAskQuestion }) => {
 
   const handleSubmit = () => {
     if (question.trim()) {
-      handleAskQuestion(question); // Send question to parent (App.js)
+      handleAskQuestion(question);
     } else {
       alert("Please enter a question.");
     }
   };
 
   return (
-    <div>
+    <div className="question-input-container">
       <input
         type="text"
         placeholder="Ask a question"
         value={question}
         onChange={handleChange}
+        className="question-input"
       />
-      <button onClick={handleSubmit}>Ask</button>
+      <button onClick={handleSubmit} className="question-button">
+        Ask
+      </button>
     </div>
   );
 };
