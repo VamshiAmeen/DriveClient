@@ -12,7 +12,7 @@ function App() {
     try {
       setAnswer("");
       setLoading(true);
-      const response = await axios.post("http://localhost:3001/ask", {
+      const response = await axios.post("https://driveserver-lzct.onrender.com/ask", {
         question,
         documentContent: localStorage.getItem("documentContent"),
       });
