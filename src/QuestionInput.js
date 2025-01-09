@@ -4,9 +4,7 @@ import "./QuestionInput.css";
 const QuestionInput = ({ handleAskQuestion }) => {
   const [question, setQuestion] = useState("");
 
-  const handleChange = (event) => {
-    setQuestion(event.target.value);
-  };
+  const handleChange = (e) => setQuestion(e.target.value);
 
   const handleSubmit = () => {
     if (question.trim()) {
@@ -17,16 +15,17 @@ const QuestionInput = ({ handleAskQuestion }) => {
   };
 
   return (
-    <div className="question-input-container">
+    <div className="question-box">
       <input
         type="text"
-        placeholder="Ask a question"
+        placeholder="Enter your question here"
         value={question}
         onChange={handleChange}
         className="question-input"
       />
-      <button onClick={handleSubmit} className="question-button">
-        Ask
+      <br/>
+      <button onClick={handleSubmit} className="question-submit">
+        Submit
       </button>
     </div>
   );

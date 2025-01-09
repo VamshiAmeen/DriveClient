@@ -6,55 +6,52 @@ import "./App.css";
 
 function App() {
   const [answer, setAnswer] = useState("");
-  const [loading ,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleAskQuestion = async (question) => {
     try {
-      setAnswer('')
-      setLoading(true)
+      setAnswer("");
+      setLoading(true);
       const response = await axios.post("http://localhost:3001/ask", {
         question,
-        documentContent: localStorage.getItem("documentContent"), // Store documentContent in localStorage
+        documentContent: localStorage.getItem("documentContent"),
       });
-      console.log(response.data, "response");
+      setLoading(false);
       if (response.data?.answers && response.data.answers.length > 0) {
-        setLoading(false)
-        // Extract the text from each answer
-        const answers = response.data.answers.map((item) => {
-          if (item.answer?.candidates) {
-            return item.answer.candidates
-              .map(candidate => candidate.content?.parts?.map(part => part.text).join(''))
-              .join('') || 'No answer text available';
-          }
-          return 'No candidates available';
-        });
-        setAnswer(answers.join('')); 
-
+        const answers = response.data.answers.map((item) =>
+          item.answer?.candidates
+            ? item.answer.candidates
+                .map((candidate) =>
+                  candidate.content?.parts?.map((part) => part.text).join("")
+                )
+                .join("")
+            : "No answer text available"
+        );
+        setAnswer(answers.join(""));
       }
-        // Join all answers and display the first one (assuming you want the first result)
-      // setAnswer(response.data.answers[0].answer);
     } catch (error) {
       console.error("Error:", error);
       setAnswer("Error processing your request.");
     }
   };
-  
 
   return (
     <div className="app-container">
       <header>
-        <h1>AI-Powered Document Q&A</h1>
+        <h1>SmartDoc AI</h1>
       </header>
       <main>
-        <UploadDocument />
-        <QuestionInput handleAskQuestion={handleAskQuestion} />
-        <>{loading ? 'loading...' : ''}</>
-        {answer && (
-          <div className="answer-container">
-            <h3>Answer:</h3>
-            <p>{answer}</p>
-          </div>
-        )}
+        <div className="card">
+          <UploadDocument />
+          <QuestionInput handleAskQuestion={handleAskQuestion} />
+          {loading && <p className="loading">Processing your request...</p>}
+          {answer && (
+            <div className="answer-container">
+              <h2>Answer</h2>
+              <p>{answer}</p>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

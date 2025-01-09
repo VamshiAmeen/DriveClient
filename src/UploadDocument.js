@@ -4,44 +4,40 @@ import "./UploadDocument.css";
 
 const UploadDocument = () => {
   const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState("");
+  const [status, setStatus] = useState("");
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
-    setUploadStatus("");
+    setStatus("");
   };
 
   const handleUpload = async () => {
     if (!file) {
-      alert("Please upload a file.");
+      alert("Please select a file.");
       return;
     }
-  
+
     const formData = new FormData();
-    formData.append('file', file);  // Correctly append the file
-  
+    formData.append("file", file);
+
     try {
-      const response = await axios.post('http://localhost:3001/uploads', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const response = await axios.post("http://localhost:3001/uploads", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-  
-      console.log('File uploaded successfully:', response.data);
-      setUploadStatus('File uploaded successfully!');
+      setStatus("File uploaded successfully!");
     } catch (error) {
-      console.error('Failed to upload file:', error);
-      setUploadStatus('Failed to upload file.');
+      setStatus("Failed to upload file.");
     }
   };
-  
+
   return (
-    <div className="upload-container">
+    <div className="upload-box">
       <input type="file" onChange={handleFileChange} className="upload-input" />
-      <button onClick={handleUpload} className="upload-button">
-        Upload Document
+      <br></br>
+      <button onClick={handleUpload} className="upload-btn">
+        Upload
       </button>
-      {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
+      {status && <p className="upload-status">{status}</p>}
     </div>
   );
 };
